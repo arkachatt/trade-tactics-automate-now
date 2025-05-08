@@ -50,7 +50,7 @@ const LeadForm = ({ type, title, subtitle, buttonText }: LeadFormProps) => {
       toast({
         title: "Form submitted successfully!",
         description: "We'll get back to you shortly.",
-        variant: "success",
+        variant: "default", // Changed from "success" to "default"
       });
       
       // Reset form

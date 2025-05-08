@@ -27,7 +27,7 @@ const Newsletter = () => {
       toast({
         title: "Subscription successful!",
         description: "Thank you for subscribing to our newsletter.",
-        variant: "success",
+        variant: "default", // Changed from "success" to "default"
       });
       
       // Reset form
