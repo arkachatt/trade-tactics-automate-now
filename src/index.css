@@ -1,3 +1,6 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -35,19 +38,12 @@
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -96,6 +92,156 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+    scroll-behavior: smooth;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-montserrat font-bold;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  p {
+    @apply text-base md:text-lg;
+  }
+}
+
+@layer components {
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+  
+  .gradient-bg {
+    @apply bg-gradient-to-r from-primary via-primary-light to-secondary-dark;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+
+  .section-title {
+    @apply text-center mb-12;
+  }
+
+  .section-title h2 {
+    @apply text-3xl md:text-4xl font-bold text-primary mb-4;
+  }
+
+  .section-title p {
+    @apply text-gray-600 max-w-2xl mx-auto;
+  }
+
+  .btn-primary {
+    @apply bg-secondary hover:bg-secondary-dark text-white font-bold py-3 px-6 rounded-md transition-all duration-300 inline-block text-center;
+  }
+
+  .btn-secondary {
+    @apply bg-white hover:bg-gray-100 text-primary font-bold py-3 px-6 rounded-md transition-all duration-300 border border-primary inline-block text-center;
+  }
+
+  .btn-outline {
+    @apply bg-transparent hover:bg-primary/10 text-primary font-bold py-2 px-4 rounded-md transition-all duration-300 border border-primary inline-block text-center;
+  }
+
+  .container {
+    @apply px-4 md:px-8;
+  }
+}
+
+.scrollspy-active {
+  @apply text-secondary font-semibold;
+}
+
+/* Code background elements */
+.code-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.code-bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 40 L40 20 L60 40 L40 60 Z' stroke='%232D9CDB10' stroke-width='1' fill='none' /%3E%3C/svg%3E");
+  opacity: 0.1;
+  z-index: -1;
+}
+
+/* Line chart background */
+.chart-bg {
+  position: relative;
+}
+
+.chart-bg::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  background-image: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,50 Q25,25 50,50 T100,50' stroke='%232D9CDB30' stroke-width='2' fill='none' /%3E%3C/svg%3E");
+  background-size: cover;
+  background-repeat: no-repeat;
+  z-index: -1;
+  opacity: 0.2;
+}
+
+/* Sticky navbar styles */
+.sticky-nav {
+  @apply fixed top-0 left-0 right-0 bg-white shadow-md z-50 transition-all duration-300;
+}
+
+/* Form input styles */
+.form-input {
+  @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent;
+}
+
+/* Timeline styles */
+.timeline-item {
+  @apply relative pl-8 pb-8 border-l border-gray-300;
+}
+
+.timeline-item::before {
+  content: "";
+  @apply absolute -left-2 top-0 w-4 h-4 bg-secondary rounded-full;
+}
+
+.timeline-item:last-child {
+  @apply border-l-0;
+}
+
+/* Code snippet styling */
+.code-snippet {
+  background-color: #1e293b;
+  color: #e2e8f0;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+/* Animated counter */
+.counter {
+  @apply font-bold text-4xl text-secondary;
+}
+
+/* FAQ accordion custom styles */
+.faq-item[data-state='open'] .faq-icon {
+  transform: rotate(180deg);
 }
