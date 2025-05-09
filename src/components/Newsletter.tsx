@@ -1,79 +1,41 @@
 
 import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useLeadFormSubmit } from "@/hooks/useLeadFormSubmit";
 
 const newsletterSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email" }),
 });
 
+type NewsletterFormData = z.infer<typeof newsletterSchema>;
+
 const Newsletter = () => {
-  const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { isSubmitting, submitForm } = useLeadFormSubmit({ type: "newsletter" });
   
-  const form = useForm<z.infer<typeof newsletterSchema>>({
+  const form = useForm<NewsletterFormData>({
     resolver: zodResolver(newsletterSchema),
     defaultValues: {
       email: "",
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof newsletterSchema>) => {
-    setIsSubmitting(true);
+  const onSubmit = async (values: NewsletterFormData) => {
+    const success = await submitForm({
+      name: "Newsletter Subscriber",
+      email: values.email,
+      phone: "Not provided",
+      company: undefined,
+      strategy: undefined,
+      message: undefined
+    });
     
-    try {
-      // Save to Supabase
-      const { error: dbError } = await supabase
-        .from('leads')
-        .insert({
-          name: "Newsletter Subscriber",
-          email: values.email,
-          phone: "Not provided",
-          form_type: "newsletter"
-        });
-      
-      if (dbError) {
-        throw new Error(dbError.message);
-      }
-      
-      // Send confirmation email
-      const { error: emailError } = await supabase.functions.invoke('send-confirmation', {
-        body: {
-          name: "Subscriber",
-          email: values.email,
-          phone: "Not provided",
-          formType: "newsletter"
-        }
-      });
-      
-      if (emailError) {
-        console.warn("Email sending failed but subscription was saved:", emailError);
-      }
-      
-      toast({
-        title: "Subscription successful!",
-        description: "Thank you for subscribing to our newsletter.",
-        variant: "default",
-      });
-      
-      // Reset form
+    if (success) {
       form.reset();
-      
-    } catch (error) {
-      console.error("Newsletter subscription error:", error);
-      toast({
-        title: "Subscription failed",
-        description: "There was an issue processing your request. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
