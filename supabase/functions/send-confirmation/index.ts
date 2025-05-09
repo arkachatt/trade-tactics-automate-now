@@ -47,7 +47,9 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send notification email to admin
     if (adminEmail) {
-      const formTypeText = submission.formType === "hero" ? "Strategy Automation" : "Contact Form";
+      const formTypeText = submission.formType === "hero" ? "Strategy Automation" : 
+                          submission.formType === "newsletter" ? "Newsletter Subscription" : "Contact Form";
+      
       const adminEmailResponse = await resend.emails.send({
         from: "TradeTactics Leads <onboarding@resend.dev>",
         to: [adminEmail],
