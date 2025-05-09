@@ -1,15 +1,14 @@
 
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-
-interface FormData {
-  name: string;
-  email: string;
-  phone: string;
-  company?: string;
-  strategy?: string;
-  message?: string;
-}
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
 interface LeadFormProps {
   type: "hero" | "contact";
@@ -18,51 +17,88 @@ interface LeadFormProps {
   buttonText: string;
 }
 
+const formSchema = z.object({
+  name: z.string().min(2, { message: "Name is required" }),
+  email: z.string().email({ message: "Please enter a valid email" }),
+  phone: z.string().min(5, { message: "Phone number is required" }),
+  company: z.string().optional(),
+  strategy: z.string().optional(),
+  message: z.string().optional(),
+});
+
 const LeadForm = ({ type, title, subtitle, buttonText }: LeadFormProps) => {
   const { toast } = useToast();
-  const [formData, setFormData] = useState<FormData>({
-    name: "",
-    email: "",
-    phone: "",
-    company: "",
-    strategy: "",
-    message: "",
-  });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      company: "",
+      strategy: "",
+      message: "",
+    },
+  });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      // Save to Supabase
+      const { error: dbError } = await supabase
+        .from('leads')
+        .insert({
+          name: values.name,
+          email: values.email,
+          phone: values.phone,
+          company: values.company || null,
+          strategy: values.strategy || null,
+          message: values.message || null,
+          form_type: type
+        });
+      
+      if (dbError) {
+        throw new Error(dbError.message);
+      }
+      
+      // Send confirmation emails
+      const { error: emailError } = await supabase.functions.invoke('send-confirmation', {
+        body: {
+          name: values.name,
+          email: values.email,
+          phone: values.phone,
+          company: values.company,
+          strategy: values.strategy,
+          message: values.message,
+          formType: type
+        }
+      });
+      
+      if (emailError) {
+        console.warn("Email sending failed but form data was saved:", emailError);
+      }
+      
       toast({
-        title: "Form submitted successfully!",
-        description: "We'll get back to you shortly.",
-        variant: "default", // Changed from "success" to "default"
+        title: "Submission successful!",
+        description: "Thank you for your inquiry. We'll get back to you shortly.",
+        variant: "default",
       });
       
       // Reset form
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        company: "",
-        strategy: "",
-        message: "",
+      form.reset();
+      
+    } catch (error) {
+      console.error("Form submission error:", error);
+      toast({
+        title: "Submission failed",
+        description: "There was an issue processing your request. Please try again.",
+        variant: "destructive",
       });
-    }, 1500);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -70,122 +106,120 @@ const LeadForm = ({ type, title, subtitle, buttonText }: LeadFormProps) => {
       {title && <h3 className="text-xl md:text-2xl font-bold mb-2">{title}</h3>}
       {subtitle && <p className="text-gray-600 mb-6">{subtitle}</p>}
       
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-            Name *
-          </label>
-          <input
-            type="text"
-            id="name"
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={form.control}
             name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            className="form-input"
-            placeholder="Your full name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-gray-700">Name *</FormLabel>
+                <FormControl>
+                  <Input placeholder="Your full name" {...field} className="form-input" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-            Email *
-          </label>
-          <input
-            type="email"
-            id="email"
+          
+          <FormField
+            control={form.control}
             name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            className="form-input"
-            placeholder="your@email.com"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-gray-700">Email *</FormLabel>
+                <FormControl>
+                  <Input type="email" placeholder="your@email.com" {...field} className="form-input" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        
-        <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-            Phone *
-          </label>
-          <input
-            type="tel"
-            id="phone"
+          
+          <FormField
+            control={form.control}
             name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            required
-            className="form-input"
-            placeholder="Your contact number"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium text-gray-700">Phone *</FormLabel>
+                <FormControl>
+                  <Input placeholder="Your contact number" {...field} className="form-input" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        
-        {type === "hero" && (
-          <div>
-            <label htmlFor="strategy" className="block text-sm font-medium text-gray-700 mb-1">
-              Strategy Description
-            </label>
-            <input
-              type="text"
-              id="strategy"
+          
+          {type === "hero" && (
+            <FormField
+              control={form.control}
               name="strategy"
-              value={formData.strategy}
-              onChange={handleChange}
-              className="form-input"
-              placeholder="Briefly describe your strategy"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-medium text-gray-700">Strategy Description</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Briefly describe your strategy" {...field} className="form-input" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-        )}
-        
-        {type === "contact" && (
-          <>
-            <div>
-              <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1">
-                Company/Trading Entity
-              </label>
-              <input
-                type="text"
-                id="company"
+          )}
+          
+          {type === "contact" && (
+            <>
+              <FormField
+                control={form.control}
                 name="company"
-                value={formData.company}
-                onChange={handleChange}
-                className="form-input"
-                placeholder="Your company name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-700">Company/Trading Entity</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Your company name" {...field} className="form-input" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            
-            <div>
-              <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-                Message
-              </label>
-              <textarea
-                id="message"
+              
+              <FormField
+                control={form.control}
                 name="message"
-                value={formData.message}
-                onChange={handleChange}
-                rows={4}
-                className="form-input"
-                placeholder="Tell us about your requirements"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-gray-700">Message</FormLabel>
+                    <FormControl>
+                      <Textarea 
+                        placeholder="Tell us about your requirements" 
+                        {...field} 
+                        rows={4}
+                        className="form-input" 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-          </>
-        )}
-        
-        <div className="mt-2">
-          <p className="text-xs text-gray-500 mb-4">
-            By submitting this form, you agree to our privacy policy. We'll never share your data with third parties.
-          </p>
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="btn-primary w-full flex items-center justify-center"
-          >
-            {isSubmitting ? (
-              <span className="inline-block animate-spin mr-2">⟳</span>
-            ) : null}
-            {buttonText}
-          </button>
-        </div>
-      </form>
+            </>
+          )}
+          
+          <div className="mt-2">
+            <p className="text-xs text-gray-500 mb-4">
+              By submitting this form, you agree to our privacy policy. We'll never share your data with third parties.
+            </p>
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="btn-primary w-full flex items-center justify-center"
+            >
+              {isSubmitting ? (
+                <span className="inline-block animate-spin mr-2">⟳</span>
+              ) : null}
+              {buttonText}
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 };
