@@ -17,9 +17,7 @@ const WhatWeDo = () => {
       <div className="container mx-auto">
         <div className="section-title">
           <h2>What We Do</h2>
-          <p>At TradeTactics, we bridge the gap between trading expertise and technical implementation. We transform your proven trading strategies into robust, automated systems that execute with speed and precision in Indian financial markets.
-
-Our team of IISc alumni combines deep technical knowledge with real market experience to deliver solutions that help proprietary traders and HNIs focus on what matters most—finding alpha—while our systems handle the execution.</p>
+          <p>We specialize in transforming discretionary trading strategies into powerful automated systems, giving you a technological edge in the Indian markets.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
