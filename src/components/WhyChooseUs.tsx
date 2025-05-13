@@ -12,7 +12,7 @@ const WhyChooseUs = () => {
       description: "Specialized knowledge of Indian market nuances, regulations, and broker APIs.",
     },
     {
-      title: "Proprietary Technology",
+      title: "High Performance Systems",
       description: "Custom-built infrastructure that offers sub-millisecond execution speeds and 99.9% uptime.",
     },
     {

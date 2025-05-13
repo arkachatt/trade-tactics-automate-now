@@ -1,5 +1,5 @@
 
-import LeadForm from "./LeadForm";
+
 
 const Hero = () => {
   return (
@@ -7,9 +7,9 @@ const Hero = () => {
       {/* Background pattern */}
       <div className="absolute inset-0 bg-gradient-to-b from-white via-transparent to-transparent z-0"></div>
       
-      <div className="container mx-auto px-4 pt-24 pb-16 md:py-32">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-          <div className="z-10 animate-fade-up">
+      <div className="container mx-auto px-4 pt-12 pb-16 md:py-24">
+        <div className="flex justify-center items-center">
+          <div className="z-10 animate-fade-up text-center max-w-3xl mx-auto">
             <div className="bg-secondary/10 text-secondary text-sm font-semibold py-1 px-3 rounded-full inline-block mb-4">
               IISc Alumni-Founded
             </div>
@@ -22,7 +22,7 @@ const Hero = () => {
               We build custom algorithmic trading systems that execute your unique strategies with precision, speed, and reliability in the Indian market.
             </p>
             
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-4 justify-center">
               <a 
                 href="#services" 
                 onClick={(e) => {
@@ -46,7 +46,7 @@ const Hero = () => {
               </a>
             </div>
             
-            <div className="mt-8 grid grid-cols-3 gap-4">
+            <div className="mt-8 grid grid-cols-3 gap-16 max-w-xl mx-auto">
               <div className="text-center">
                 <div className="counter" data-value="98">98%</div>
                 <p className="text-sm text-gray-600">Execution Accuracy</p>
@@ -64,14 +64,7 @@ const Hero = () => {
             </div>
           </div>
           
-          <div className="z-10">
-            <LeadForm 
-              type="hero" 
-              title="Get Your Strategy Automated" 
-              subtitle="Tell us about your strategy and we'll get back to you within 24 hours." 
-              buttonText="Get Your Strategy Automated"
-            />
-          </div>
+
         </div>
         
         {/* Partner logos */}

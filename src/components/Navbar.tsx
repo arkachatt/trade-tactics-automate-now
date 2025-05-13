@@ -9,13 +9,9 @@ const Navbar = () => {
   // Sections for navigation
   const sections = [
     { id: "hero", label: "Home" },
-    { id: "what-we-do", label: "What We Do" },
-    { id: "why-choose", label: "Why Us" },
     { id: "services", label: "Services" },
     { id: "process", label: "Process" },
-    { id: "who-we-serve", label: "Clients" },
     { id: "case-studies", label: "Case Studies" },
-    { id: "about", label: "About" },
     { id: "faq", label: "FAQ" },
     { id: "contact", label: "Contact" },
   ];
