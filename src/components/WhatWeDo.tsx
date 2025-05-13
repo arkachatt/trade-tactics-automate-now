@@ -1,4 +1,6 @@
+
 import { Code, Zap, Lock } from "lucide-react";
+
 const WhatWeDo = () => {
   const features = [{
     icon: <Code size={36} className="text-secondary" />,
@@ -13,6 +15,7 @@ const WhatWeDo = () => {
     title: "Secure Infrastructure",
     description: "Built on enterprise-grade infrastructure with 99.9% uptime, keeping your strategies secure and your trades executing reliably."
   }];
+  
   return <section id="what-we-do" className="section-padding bg-muted">
       <div className="container mx-auto">
         <div className="section-title">
@@ -38,14 +41,24 @@ const WhatWeDo = () => {
                 Our streamlined process converts your manual trading rules into 
                 high-performance algorithms that work across all major Indian brokers.
               </p>
-              <a href="#process" onClick={e => {
-              e.preventDefault();
-              document.getElementById("process")?.scrollIntoView({
-                behavior: "smooth"
-              });
-            }} className="bg-white text-primary font-bold py-3 px-6 rounded-md hover:bg-gray-100 transition-colors duration-300 inline-block">
-                See Our Process
-              </a>
+              <div className="flex space-x-4">
+                <a href="#process" onClick={e => {
+                  e.preventDefault();
+                  document.getElementById("process")?.scrollIntoView({
+                    behavior: "smooth"
+                  });
+                }} className="bg-white text-primary font-bold py-3 px-6 rounded-md hover:bg-gray-100 transition-colors duration-300 inline-block">
+                  See Our Process
+                </a>
+                <a href="#contact" onClick={e => {
+                  e.preventDefault();
+                  document.getElementById("contact")?.scrollIntoView({
+                    behavior: "smooth"
+                  });
+                }} className="bg-secondary text-white font-bold py-3 px-6 rounded-md hover:bg-secondary/80 transition-colors duration-300 inline-block">
+                  Get Started Now
+                </a>
+              </div>
             </div>
             
             <div className="code-snippet">
@@ -73,4 +86,5 @@ function executeTrade(signal, quantity) {
       </div>
     </section>;
 };
+
 export default WhatWeDo;
