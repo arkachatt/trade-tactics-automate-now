@@ -19,6 +19,14 @@ const Hero = () => {
     return () => document.removeEventListener('click', handleAnchorClick);
   }, []);
 
+  // Functions to handle scroll to sections
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section id="hero" className="min-h-screen relative code-bg overflow-hidden">
       {/* Background pattern - completely removed blur effect */}
@@ -40,25 +48,17 @@ const Hero = () => {
           
           <div className="flex flex-wrap gap-4 justify-center">
             <button 
-              onClick={() => {
-                const servicesSection = document.getElementById('services');
-                if (servicesSection) {
-                  servicesSection.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
-              className="btn-primary"
+              type="button"
+              onClick={() => scrollToSection('services')}
+              className="btn-primary cursor-pointer"
             >
               Explore Services
             </button>
             
             <button 
-              onClick={() => {
-                const contactSection = document.getElementById('contact');
-                if (contactSection) {
-                  contactSection.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
-              className="btn-secondary"
+              type="button"
+              onClick={() => scrollToSection('contact')}
+              className="btn-secondary cursor-pointer"
             >
               Get Started
             </button>
