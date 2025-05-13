@@ -1,36 +1,9 @@
 
-import { useEffect } from 'react';
-
 const Hero = () => {
-  useEffect(() => {
-    // Setup smooth scrolling for anchor links
-    const handleAnchorClick = (e: MouseEvent) => {
-      const target = e.target as HTMLAnchorElement;
-      if (target.tagName === 'A' && target.hash) {
-        e.preventDefault();
-        const element = document.querySelector(target.hash);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      }
-    };
-
-    document.addEventListener('click', handleAnchorClick);
-    return () => document.removeEventListener('click', handleAnchorClick);
-  }, []);
-
-  // Functions to handle scroll to sections
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <section id="hero" className="min-h-screen relative code-bg overflow-hidden">
-      {/* Background pattern - completely removed blur effect */}
-      <div className="absolute inset-0 z-0"></div>
+      {/* Background pattern */}
+      <div className="absolute inset-0 bg-gradient-to-b from-white via-transparent to-transparent z-0"></div>
       
       <div className="container mx-auto px-4 pt-24 pb-16 md:py-32">
         <div className="z-10 animate-fade-up max-w-3xl mx-auto text-center">
@@ -47,21 +20,27 @@ const Hero = () => {
           </p>
           
           <div className="flex flex-wrap gap-4 justify-center">
-            <button 
-              type="button"
-              onClick={() => scrollToSection('services')}
-              className="btn-primary cursor-pointer"
+            <a 
+              href="#services" 
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
+              }} 
+              className="btn-primary"
             >
               Explore Services
-            </button>
+            </a>
             
-            <button 
-              type="button"
-              onClick={() => scrollToSection('contact')}
-              className="btn-secondary cursor-pointer"
+            <a 
+              href="#contact" 
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+              }} 
+              className="btn-secondary"
             >
               Get Started
-            </button>
+            </a>
           </div>
           
           <div className="mt-12 grid grid-cols-3 gap-4">
@@ -77,7 +56,7 @@ const Hero = () => {
             
             <div className="text-center">
               <div className="counter" data-value="6">6</div>
-              <p className="text-sm text-gray-600">Brokers Integrated</p>
+              <p className="text-sm text-gray-600">Broker Integrations</p>
             </div>
           </div>
         </div>
@@ -99,6 +78,10 @@ const Hero = () => {
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
         <a 
           href="#what-we-do" 
+          onClick={(e) => {
+            e.preventDefault();
+            document.getElementById("what-we-do")?.scrollIntoView({ behavior: "smooth" });
+          }} 
           className="text-secondary"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
