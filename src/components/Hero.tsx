@@ -2,7 +2,7 @@
 const Hero = () => {
   return (
     <section id="hero" className="min-h-screen relative code-bg overflow-hidden">
-      {/* Background pattern */}
+      {/* Background pattern - removed blur effect */}
       <div className="absolute inset-0 bg-gradient-to-b from-white via-transparent to-transparent z-0"></div>
       
       <div className="container mx-auto px-4 pt-24 pb-16 md:py-32">
@@ -22,10 +22,6 @@ const Hero = () => {
           <div className="flex flex-wrap gap-4 justify-center">
             <a 
               href="#services" 
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
-              }} 
               className="btn-primary"
             >
               Explore Services
@@ -33,10 +29,6 @@ const Hero = () => {
             
             <a 
               href="#contact" 
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-              }} 
               className="btn-secondary"
             >
               Get Started
@@ -78,10 +70,6 @@ const Hero = () => {
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
         <a 
           href="#what-we-do" 
-          onClick={(e) => {
-            e.preventDefault();
-            document.getElementById("what-we-do")?.scrollIntoView({ behavior: "smooth" });
-          }} 
           className="text-secondary"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
