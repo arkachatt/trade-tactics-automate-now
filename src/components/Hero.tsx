@@ -39,19 +39,29 @@ const Hero = () => {
           </p>
           
           <div className="flex flex-wrap gap-4 justify-center">
-            <a 
-              href="#services" 
+            <button 
+              onClick={() => {
+                const servicesSection = document.getElementById('services');
+                if (servicesSection) {
+                  servicesSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
               className="btn-primary"
             >
               Explore Services
-            </a>
+            </button>
             
-            <a 
-              href="#contact" 
+            <button 
+              onClick={() => {
+                const contactSection = document.getElementById('contact');
+                if (contactSection) {
+                  contactSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
               className="btn-secondary"
             >
               Get Started
-            </a>
+            </button>
           </div>
           
           <div className="mt-12 grid grid-cols-3 gap-4">
