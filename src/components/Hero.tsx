@@ -1,9 +1,28 @@
 
+import { useEffect } from 'react';
+
 const Hero = () => {
+  useEffect(() => {
+    // Setup smooth scrolling for anchor links
+    const handleAnchorClick = (e: MouseEvent) => {
+      const target = e.target as HTMLAnchorElement;
+      if (target.tagName === 'A' && target.hash) {
+        e.preventDefault();
+        const element = document.querySelector(target.hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    };
+
+    document.addEventListener('click', handleAnchorClick);
+    return () => document.removeEventListener('click', handleAnchorClick);
+  }, []);
+
   return (
     <section id="hero" className="min-h-screen relative code-bg overflow-hidden">
-      {/* Background pattern - removed blur effect */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-transparent to-transparent z-0"></div>
+      {/* Background pattern - completely removed blur effect */}
+      <div className="absolute inset-0 z-0"></div>
       
       <div className="container mx-auto px-4 pt-24 pb-16 md:py-32">
         <div className="z-10 animate-fade-up max-w-3xl mx-auto text-center">
@@ -48,7 +67,7 @@ const Hero = () => {
             
             <div className="text-center">
               <div className="counter" data-value="6">6</div>
-              <p className="text-sm text-gray-600">Broker Integrations</p>
+              <p className="text-sm text-gray-600">Brokers Integrated</p>
             </div>
           </div>
         </div>

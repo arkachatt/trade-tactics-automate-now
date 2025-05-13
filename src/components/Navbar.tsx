@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 
@@ -10,7 +11,6 @@ const Navbar = () => {
     { id: "hero", label: "Home" },
     { id: "services", label: "Services" },
     { id: "process", label: "Process" },
-    { id: "case-studies", label: "Case Studies" },
     { id: "contact", label: "Contact" },
   ];
 
@@ -20,9 +20,24 @@ const Navbar = () => {
       setSticky(window.scrollY > 100);
     };
 
+    // Setup smooth scrolling for anchor links
+    const handleAnchorClick = (e: MouseEvent) => {
+      const target = e.target as HTMLAnchorElement;
+      if (target.tagName === 'A' && target.hash) {
+        e.preventDefault();
+        const element = document.querySelector(target.hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    };
+
     window.addEventListener("scroll", handleScroll);
+    document.addEventListener('click', handleAnchorClick);
+    
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener('click', handleAnchorClick);
     };
   }, []);
 
