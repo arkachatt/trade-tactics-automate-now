@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 
@@ -5,12 +6,17 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [sticky, setSticky] = useState(false);
 
-  // Reduced sections for navigation - only keeping the most important ones
+  // Sections for navigation
   const sections = [
     { id: "hero", label: "Home" },
+    { id: "what-we-do", label: "What We Do" },
+    { id: "why-choose", label: "Why Us" },
     { id: "services", label: "Services" },
     { id: "process", label: "Process" },
+    { id: "who-we-serve", label: "Clients" },
     { id: "case-studies", label: "Case Studies" },
+    { id: "about", label: "About" },
+    { id: "faq", label: "FAQ" },
     { id: "contact", label: "Contact" },
   ];
 
@@ -54,7 +60,7 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-8">
+          <div className="hidden md:flex space-x-6">
             {sections.map((section) => (
               <a
                 key={section.id}
